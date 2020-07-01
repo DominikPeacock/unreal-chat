@@ -1,10 +1,12 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "ChatManager.h"
+
 #include "ChatManagerStyle.h"
-#include "ChatManagerCommands.h"
-#include "Misc/MessageDialog.h"
+#include "Logging.h"
+
 #include "ToolMenus.h"
+#include "LevelEditor.h"
 
 static const FName ChatManagerTabName("ChatManager");
 
@@ -12,71 +14,68 @@ static const FName ChatManagerTabName("ChatManager");
 
 void FChatManagerModule::StartupModule()
 {
-	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
-	
 	FChatManagerStyle::Initialize();
 	FChatManagerStyle::ReloadTextures();
-
-	FChatManagerCommands::Register();
-	
-	PluginCommands = MakeShareable(new FUICommandList);
-
-	PluginCommands->MapAction(
-		FChatManagerCommands::Get().PluginAction,
-		FExecuteAction::CreateRaw(this, &FChatManagerModule::PluginButtonClicked),
-		FCanExecuteAction());
 
 	UToolMenus::RegisterStartupCallback(FSimpleMulticastDelegate::FDelegate::CreateRaw(this, &FChatManagerModule::RegisterMenus));
 }
 
 void FChatManagerModule::ShutdownModule()
 {
-	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
-	// we call this function before unloading the module.
-
 	UToolMenus::UnRegisterStartupCallback(this);
 
 	UToolMenus::UnregisterOwner(this);
 
 	FChatManagerStyle::Shutdown();
-
-	FChatManagerCommands::Unregister();
-}
-
-void FChatManagerModule::PluginButtonClicked()
-{
-	// Put your "OnButtonClicked" stuff here
-	FText DialogText = FText::Format(
-							LOCTEXT("PluginButtonDialogText", "Add code to {0} in {1} to override this button's actions"),
-							FText::FromString(TEXT("FChatManagerModule::PluginButtonClicked()")),
-							FText::FromString(TEXT("ChatManager.cpp"))
-					   );
-	FMessageDialog::Open(EAppMsgType::Ok, DialogText);
 }
 
 void FChatManagerModule::RegisterMenus()
 {
-	// Owner will be used for cleanup in call to UToolMenus::UnregisterOwner
-	FToolMenuOwnerScoped OwnerScoped(this);
+	FLevelEditorModule& LevelEditorModule = FModuleManager::LoadModuleChecked<FLevelEditorModule>("LevelEditor");
+	TSharedRef<FExtender> ChatMenuExtender(new FExtender());
+	ChatMenuExtender->AddToolBarExtension(
+		"Settings",
+		EExtensionHook::After,
+		nullptr,
+		FToolBarExtensionDelegate::CreateRaw(this, &FChatManagerModule::CreateToolbarMenuButton));
+	
+	LevelEditorModule.GetToolBarExtensibilityManager()->AddExtender(ChatMenuExtender);
+}
 
-	{
-		UToolMenu* Menu = UToolMenus::Get()->ExtendMenu("LevelEditor.MainMenu.Window");
-		{
-			FToolMenuSection& Section = Menu->FindOrAddSection("WindowLayout");
-			Section.AddMenuEntryWithCommandList(FChatManagerCommands::Get().PluginAction, PluginCommands);
-		}
-	}
+void FChatManagerModule::CreateToolbarMenuButton(FToolBarBuilder& ToolbarBuilder)
+{
+	ToolbarBuilder.AddComboButton(
+		FUIAction(),
+		FOnGetContent::CreateRaw(this, &FChatManagerModule::MakeChatSelectionMenu),
+		LOCTEXT("TestChatManagerChatMenu", "Chat"),
+		FText()
+	);
+}
 
-	{
-		UToolMenu* ToolbarMenu = UToolMenus::Get()->ExtendMenu("LevelEditor.LevelEditorToolBar");
-		{
-			FToolMenuSection& Section = ToolbarMenu->FindOrAddSection("Settings");
-			{
-				FToolMenuEntry& Entry = Section.AddEntry(FToolMenuEntry::InitToolBarButton(FChatManagerCommands::Get().PluginAction));
-				Entry.SetCommandList(PluginCommands);
-			}
-		}
-	}
+TSharedRef<SWidget> FChatManagerModule::MakeChatSelectionMenu()
+{
+	FMenuBuilder MenuBuilder(false, nullptr);
+
+	MenuBuilder.BeginSection("Chats", LOCTEXT("ChatsSection", "Chats"));
+
+	// TODO: Replace this with a dynamic list
+	MenuBuilder.AddMenuEntry(
+		LOCTEXT("TestChatLabel", "Chat 1"),
+		LOCTEXT("TestChatTooltip", "Opens chat 1"),
+		FSlateIcon(),
+		FUIAction(
+			FExecuteAction::CreateLambda([=] 
+				{
+					UE_LOG(ChatManager, Warning, TEXT("Dummy implementation for chat 1"))
+				})
+		),
+		NAME_None,
+		EUserInterfaceActionType::Button
+	);
+	
+	MenuBuilder.EndSection();
+	
+	return MenuBuilder.MakeWidget();
 }
 
 #undef LOCTEXT_NAMESPACE

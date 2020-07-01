@@ -22,7 +22,8 @@ public:
 private:
 
 	void RegisterMenus();
-
+	void CreateToolbarMenuButton(FToolBarBuilder& ToolbarBuilder);
+	TSharedRef<SWidget> MakeChatSelectionMenu();
 
 private:
 	TSharedPtr<class FUICommandList> PluginCommands;

@@ -35,7 +35,6 @@ public class ChatManager : ModuleRules
 			new string[]
 			{
 				"Projects",
-				"InputCore",
 				"UnrealEd",
 				"ToolMenus",
 				"CoreUObject",
