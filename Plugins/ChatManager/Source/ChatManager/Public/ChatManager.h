@@ -21,8 +21,8 @@ public:
 	
 private:
 
-	void RegisterMenus();
-	void CreateToolbarMenuButton(FToolBarBuilder& ToolbarBuilder);
+	void RegisterToolbarComboButton();
+	void CreateToolbarComboButton(FToolBarBuilder& ToolbarBuilder);
 	TSharedRef<SWidget> MakeChatSelectionMenu();
 
 private:

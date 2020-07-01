@@ -17,7 +17,7 @@ void FChatManagerModule::StartupModule()
 	FChatManagerStyle::Initialize();
 	FChatManagerStyle::ReloadTextures();
 
-	UToolMenus::RegisterStartupCallback(FSimpleMulticastDelegate::FDelegate::CreateRaw(this, &FChatManagerModule::RegisterMenus));
+	UToolMenus::RegisterStartupCallback(FSimpleMulticastDelegate::FDelegate::CreateRaw(this, &FChatManagerModule::RegisterToolbarComboButton));
 }
 
 void FChatManagerModule::ShutdownModule()
@@ -29,7 +29,7 @@ void FChatManagerModule::ShutdownModule()
 	FChatManagerStyle::Shutdown();
 }
 
-void FChatManagerModule::RegisterMenus()
+void FChatManagerModule::RegisterToolbarComboButton()
 {
 	FLevelEditorModule& LevelEditorModule = FModuleManager::LoadModuleChecked<FLevelEditorModule>("LevelEditor");
 	TSharedRef<FExtender> ChatMenuExtender(new FExtender());
@@ -37,12 +37,12 @@ void FChatManagerModule::RegisterMenus()
 		"Settings",
 		EExtensionHook::After,
 		nullptr,
-		FToolBarExtensionDelegate::CreateRaw(this, &FChatManagerModule::CreateToolbarMenuButton));
+		FToolBarExtensionDelegate::CreateRaw(this, &FChatManagerModule::CreateToolbarComboButton));
 	
 	LevelEditorModule.GetToolBarExtensibilityManager()->AddExtender(ChatMenuExtender);
 }
 
-void FChatManagerModule::CreateToolbarMenuButton(FToolBarBuilder& ToolbarBuilder)
+void FChatManagerModule::CreateToolbarComboButton(FToolBarBuilder& ToolbarBuilder)
 {
 	ToolbarBuilder.AddComboButton(
 		FUIAction(),
