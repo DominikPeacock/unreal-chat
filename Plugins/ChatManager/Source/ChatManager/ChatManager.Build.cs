@@ -1,5 +1,6 @@
 // Copyright, Dominik Peacock. All rights reserved.
 
+using System.IO;
 using UnrealBuildTool;
 
 public class ChatManager : ModuleRules
@@ -9,11 +10,20 @@ public class ChatManager : ModuleRules
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
 		PublicIncludePaths.AddRange(
-			new string[] {
-				// ... add public include paths required here ...
+			new string[] 
+            {
+				Path.Combine(ModuleDirectory, "Public"),
+                Path.Combine(ModuleDirectory, "Public", "Widgets")
 			}
 			);
-		
+        PrivateIncludePaths.AddRange(
+            new string[]
+            {
+                Path.Combine(ModuleDirectory, "Private"),
+                Path.Combine(ModuleDirectory, "Private", "MVC")
+            }
+        );
+
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
@@ -21,7 +31,6 @@ public class ChatManager : ModuleRules
                 "SlateCore"
 			}
 			);
-			
 		
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
