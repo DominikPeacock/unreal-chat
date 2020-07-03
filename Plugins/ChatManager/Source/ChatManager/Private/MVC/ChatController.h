@@ -2,20 +2,27 @@
 
 #pragma once
 
+class IChatModel;
 class SChatWidget;
 
 /**
- * Implements Model-View-Controller architecture for chat system.
+ * Implements Model-View-Controller architecture for chat system:
+ *	- the view is SChatWidget
+ *	- the model is IChatModel
  */
 class FChatController
 {
 public:
 
-	// TODO: pass in model reference
-	FChatController(const FString& InChatName);
+	FChatController(TSharedRef<IChatModel> InChatToControl);
 	~FChatController();
 
 	void OpenChat() const;
+
+	TSharedRef<IChatModel> GetControlledChat() const
+	{
+		return ControlledChat;
+	}
 
 private:
 
@@ -25,7 +32,7 @@ private:
 	void OnTabClosed(TSharedRef<SDockTab> ClosedTab);
 
 	// Const members
-	const FString ChatName;
+	const TSharedRef<IChatModel> ControlledChat;
 	const FGuid TabGuid;
 
 	// Mutable members

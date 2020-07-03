@@ -2,21 +2,17 @@
 
 #include "ChatController.h"
 
-#include "Logging.h"
+#include "IChatModel.h"
 #include "SChatWidget.h"
 
 #define LOCTEXT_NAMESPACE "FChatManagerModule"
 
-FChatController::FChatController(const FString& InChatName)
+FChatController::FChatController(TSharedRef<IChatModel> InChatToControl)
 	:
-	ChatName(InChatName),
+	ControlledChat(InChatToControl),
 	TabGuid(FGuid::NewGuid())
 {
 	auto Tabmanager = FGlobalTabmanager::Get();
-	if(Tabmanager->HasTabSpawner(GetTabIdAsName()))
-	{
-		UE_LOG(ChatManager, Warning, TEXT("FChatController::FChatController: TabSpawner %s is already registered. Overwriting..."), *ChatName);
-	}
 	
 	Tabmanager->RegisterNomadTabSpawner(
 		GetTabIdAsName(),
@@ -43,7 +39,7 @@ void FChatController::OpenChat() const
 TSharedRef<SDockTab> FChatController::CreateOrGetChatTab(const FSpawnTabArgs& Args)
 {
 	TSharedRef<SDockTab> CreatedTab = SNew(SDockTab)
-		.Label(FText::FromString(ChatName))
+		.Label(FText::FromString(ControlledChat->GetChatName()))
 		.TabRole(NomadTab)
 		.OnTabClosed(SDockTab::FOnTabClosedCallback::CreateRaw(this, &FChatController::OnTabClosed))
 	[

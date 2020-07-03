@@ -2,21 +2,23 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "Modules/ModuleManager.h"
+#include "IChatManagerModule.h"
 
 class FToolBarBuilder;
 class FMenuBuilder;
 
 class FChatController;
 
-class FChatManagerModule : public IModuleInterface
+class FChatManagerModule : public IChatManagerModule
 {
 public:
 
 	/** IModuleInterface implementation */
-	virtual void StartupModule() override;
-	virtual void ShutdownModule() override;
+	void StartupModule() override;
+	void ShutdownModule() override;
+
+	void AddChat(TSharedRef<IChatModel> ChatToAdd) override;
+	void RemoveChat(TSharedRef<IChatModel> ChatToRemove) override;
 	
 private:
 

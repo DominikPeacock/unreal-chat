@@ -16,9 +16,6 @@ void FChatManagerModule::StartupModule()
 	FChatManagerStyle::ReloadTextures();
 
 	UToolMenus::RegisterStartupCallback(FSimpleMulticastDelegate::FDelegate::CreateRaw(this, &FChatManagerModule::RegisterToolbarComboButton));
-
-	TSharedRef<FChatController> DummyChatController(new FChatController("Dummy chat"));
-	ActiveChats.Add(DummyChatController);
 }
 
 void FChatManagerModule::ShutdownModule()
@@ -27,6 +24,20 @@ void FChatManagerModule::ShutdownModule()
 	UToolMenus::UnregisterOwner(this);
 
 	FChatManagerStyle::Shutdown();
+}
+
+void FChatManagerModule::AddChat(TSharedRef<IChatModel> ChatToAdd)
+{
+	TSharedRef<FChatController> NewChatController(new FChatController(ChatToAdd));
+	ActiveChats.Add(NewChatController);
+}
+
+void FChatManagerModule::RemoveChat(TSharedRef<IChatModel> ChatToRemove)
+{
+	ActiveChats.RemoveAll([=](auto controller)
+		{
+			return controller->GetControlledChat() == ChatToRemove;
+		});
 }
 
 void FChatManagerModule::RegisterToolbarComboButton()
