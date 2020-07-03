@@ -18,7 +18,10 @@
 		{
 			"Name": "ChatDebugCreator",
 			"Type": "Editor",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"Dependencies": [
+				"ChatManager"
+			]
 		}
 	]
 }

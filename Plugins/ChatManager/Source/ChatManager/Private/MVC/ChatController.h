@@ -17,12 +17,11 @@ public:
 	FChatController(TSharedRef<IChatModel> InChatToControl);
 	~FChatController();
 
+	// Interface for ChatManager module
 	void OpenChat() const;
-
-	TSharedRef<IChatModel> GetControlledChat() const
-	{
-		return ControlledChat;
-	}
+	TSharedRef<IChatModel> GetControlledChat() const;
+	FText GetMenuLabel() const;
+	FText GetMenuDescription() const;
 
 private:
 

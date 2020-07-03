@@ -72,8 +72,8 @@ TSharedRef<SWidget> FChatManagerModule::MakeChatSelectionMenu()
 	for (auto e : ActiveChats)
 	{
 		MenuBuilder.AddMenuEntry(
-			LOCTEXT("TestChatLabel", "Dummy chat label"),
-			LOCTEXT("TestChatTooltip", "Dummy chat description"),
+			e->GetMenuLabel(),
+			e->GetMenuDescription(),
 			FSlateIcon(),
 			FUIAction(
 				FExecuteAction::CreateRaw(&e.Get(), &FChatController::OpenChat)

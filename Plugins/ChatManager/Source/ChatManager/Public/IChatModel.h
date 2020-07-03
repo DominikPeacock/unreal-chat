@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-class IChatModel
+class CHATMANAGER_API IChatModel
 {
 public:
 

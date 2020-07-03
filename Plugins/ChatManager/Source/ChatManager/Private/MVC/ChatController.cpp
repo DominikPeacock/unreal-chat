@@ -36,6 +36,21 @@ void FChatController::OpenChat() const
 	Tabmanager->InvokeTab(GetTabIdAsName());
 }
 
+TSharedRef<IChatModel> FChatController::GetControlledChat() const
+{
+	return ControlledChat;
+}
+
+FText FChatController::GetMenuLabel() const
+{
+	return FText::FromString(GetControlledChat()->GetChatName());
+}
+
+FText FChatController::GetMenuDescription() const
+{
+	return FText::FromString(FString("Open ") + GetControlledChat()->GetChatName());
+}
+
 TSharedRef<SDockTab> FChatController::CreateOrGetChatTab(const FSpawnTabArgs& Args)
 {
 	TSharedRef<SDockTab> CreatedTab = SNew(SDockTab)

@@ -7,7 +7,7 @@
 
 class IChatModel;
 
-class IChatManagerModule : public IModuleInterface
+class CHATMANAGER_API IChatManagerModule : public IModuleInterface
 {
 public:
 
