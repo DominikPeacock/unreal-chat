@@ -2,13 +2,11 @@
 
 #include "ChatManager.h"
 
+#include "ChatController.h"
 #include "ChatManagerStyle.h"
-#include "Logging.h"
 
 #include "ToolMenus.h"
 #include "LevelEditor.h"
-
-static const FName ChatManagerTabName("ChatManager");
 
 #define LOCTEXT_NAMESPACE "FChatManagerModule"
 
@@ -18,12 +16,14 @@ void FChatManagerModule::StartupModule()
 	FChatManagerStyle::ReloadTextures();
 
 	UToolMenus::RegisterStartupCallback(FSimpleMulticastDelegate::FDelegate::CreateRaw(this, &FChatManagerModule::RegisterToolbarComboButton));
+
+	TSharedRef<FChatController> DummyChatController(new FChatController("Dummy chat"));
+	ActiveChats.Add(DummyChatController);
 }
 
 void FChatManagerModule::ShutdownModule()
 {
 	UToolMenus::UnRegisterStartupCallback(this);
-
 	UToolMenus::UnregisterOwner(this);
 
 	FChatManagerStyle::Shutdown();
@@ -32,6 +32,7 @@ void FChatManagerModule::ShutdownModule()
 void FChatManagerModule::RegisterToolbarComboButton()
 {
 	FLevelEditorModule& LevelEditorModule = FModuleManager::LoadModuleChecked<FLevelEditorModule>("LevelEditor");
+	
 	TSharedRef<FExtender> ChatMenuExtender(new FExtender());
 	ChatMenuExtender->AddToolBarExtension(
 		"Settings",
@@ -57,22 +58,19 @@ TSharedRef<SWidget> FChatManagerModule::MakeChatSelectionMenu()
 	FMenuBuilder MenuBuilder(false, nullptr);
 
 	MenuBuilder.BeginSection("Chats", LOCTEXT("ChatsSection", "Chats"));
-
-	// TODO: Replace this with a dynamic list
-	MenuBuilder.AddMenuEntry(
-		LOCTEXT("TestChatLabel", "Chat 1"),
-		LOCTEXT("TestChatTooltip", "Opens chat 1"),
-		FSlateIcon(),
-		FUIAction(
-			FExecuteAction::CreateLambda([=] 
-				{
-					UE_LOG(ChatManager, Warning, TEXT("Dummy implementation for chat 1"))
-				})
-		),
-		NAME_None,
-		EUserInterfaceActionType::Button
-	);
-	
+	for (auto e : ActiveChats)
+	{
+		MenuBuilder.AddMenuEntry(
+			LOCTEXT("TestChatLabel", "Dummy chat label"),
+			LOCTEXT("TestChatTooltip", "Dummy chat description"),
+			FSlateIcon(),
+			FUIAction(
+				FExecuteAction::CreateRaw(&e.Get(), &FChatController::OpenChat)
+			),
+			NAME_None,
+			EUserInterfaceActionType::Button
+		);
+	}
 	MenuBuilder.EndSection();
 	
 	return MenuBuilder.MakeWidget();

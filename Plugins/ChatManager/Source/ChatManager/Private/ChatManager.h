@@ -8,6 +8,8 @@
 class FToolBarBuilder;
 class FMenuBuilder;
 
+class FChatController;
+
 class FChatManagerModule : public IModuleInterface
 {
 public:
@@ -16,15 +18,12 @@ public:
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
 	
-	/** This function will be bound to Command. */
-	void PluginButtonClicked();
-	
 private:
 
 	void RegisterToolbarComboButton();
 	void CreateToolbarComboButton(FToolBarBuilder& ToolbarBuilder);
 	TSharedRef<SWidget> MakeChatSelectionMenu();
 
-private:
-	TSharedPtr<class FUICommandList> PluginCommands;
+	TArray<TSharedRef<FChatController>> ActiveChats;
+	
 };
