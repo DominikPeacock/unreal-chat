@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright, Dominik Peacock. All rights reserved.
 
 using UnrealBuildTool;
 
@@ -26,7 +26,7 @@ public class ChatManager : ModuleRules
 			new string[]
 			{
 				"Core",
-				// ... add other public dependencies that you statically link with here ...
+                "SlateCore"
 			}
 			);
 			
@@ -40,8 +40,7 @@ public class ChatManager : ModuleRules
 				"CoreUObject",
 				"Engine",
 				"Slate",
-				"SlateCore",
-				// ... add private dependencies that you statically link with here ...	
+				"SlateCore"
 			}
 			);
 		

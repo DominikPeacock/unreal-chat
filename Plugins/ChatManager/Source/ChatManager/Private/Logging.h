@@ -1,4 +1,4 @@
-// Copyright 2020 Dominik Peacock. All Rights Reserved. 
+// Copyright, Dominik Peacock. All rights reserved.
 
 #pragma once
 

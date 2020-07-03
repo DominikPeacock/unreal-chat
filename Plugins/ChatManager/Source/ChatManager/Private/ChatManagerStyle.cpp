@@ -1,7 +1,7 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright, Dominik Peacock. All rights reserved.
 
 #include "ChatManagerStyle.h"
-#include "ChatManager.h"
+
 #include "Framework/Application/SlateApplication.h"
 #include "Styling/SlateStyleRegistry.h"
 #include "Slate/SlateGameResources.h"

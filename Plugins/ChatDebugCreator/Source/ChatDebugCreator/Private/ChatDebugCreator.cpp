@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright, Dominik Peacock. All rights reserved.
 
 #include "ChatDebugCreator.h"
 
