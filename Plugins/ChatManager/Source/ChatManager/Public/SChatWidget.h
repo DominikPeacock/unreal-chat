@@ -5,6 +5,9 @@
 #include "Widgets/DeclarativeSyntaxSupport.h"
 #include "Widgets/SCompoundWidget.h"
 
+class SEditableTextBox;
+class SVerticalBox;
+
 class SChatWidget : public SCompoundWidget
 {
 public:
@@ -19,4 +22,11 @@ public:
 
 private:
 
+	FReply OnClickSend();
+
+
+
+	TSharedPtr<SVerticalBox> ChatHistory;
+	TSharedPtr<SEditableTextBox> EnteredMessageBox;
+	
 };
