@@ -26,6 +26,7 @@ private:
 
 	// Const members
 	const FString ChatName;
+	const FGuid TabGuid;
 
 	// Mutable members
 	TSharedPtr<SChatWidget> ChatWidget;

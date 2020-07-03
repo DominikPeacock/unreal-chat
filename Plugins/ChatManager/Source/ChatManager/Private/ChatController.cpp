@@ -9,7 +9,8 @@
 
 FChatController::FChatController(const FString& InChatName)
 	:
-	ChatName(InChatName)
+	ChatName(InChatName),
+	TabGuid(FGuid::NewGuid())
 {
 	auto Tabmanager = FGlobalTabmanager::Get();
 	if(Tabmanager->HasTabSpawner(GetTabIdAsName()))
@@ -42,8 +43,9 @@ void FChatController::OpenChat() const
 TSharedRef<SDockTab> FChatController::CreateOrGetChatTab(const FSpawnTabArgs& Args)
 {
 	TSharedRef<SDockTab> CreatedTab = SNew(SDockTab)
-	.TabRole(ETabRole::NomadTab)
-	.OnTabClosed(SDockTab::FOnTabClosedCallback::CreateRaw(this, &FChatController::OnTabClosed))
+		.Label(FText::FromString(ChatName))
+		.TabRole(NomadTab)
+		.OnTabClosed(SDockTab::FOnTabClosedCallback::CreateRaw(this, &FChatController::OnTabClosed))
 	[
 		SAssignNew(ChatWidget, SChatWidget)
 	];
@@ -53,7 +55,7 @@ TSharedRef<SDockTab> FChatController::CreateOrGetChatTab(const FSpawnTabArgs& Ar
 
 FName FChatController::GetTabIdAsName() const
 {
-	return FName(ChatName);
+	return FName(TabGuid.ToString());
 }
 
 void FChatController::OnTabClosed(TSharedRef<SDockTab> ClosedTab)
