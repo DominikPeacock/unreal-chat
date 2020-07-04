@@ -2,6 +2,8 @@
 
 #pragma once
 
+struct FChatMessage;
+
 class IChatModel;
 class SChatWidget;
 
@@ -26,9 +28,11 @@ public:
 private:
 
 	TSharedRef<SDockTab> CreateOrGetChatTab(const FSpawnTabArgs& Args);
-	FName GetTabIdAsName() const;
-
 	void OnTabClosed(TSharedRef<SDockTab> ClosedTab);
+
+	void OnModelReceiveChatMessage(const FChatMessage& ChatMessage) const;
+	void OnWidgetSendChatMessage(const FString& MessageContent) const;
+	FName GetTabIdAsName() const;
 
 	// Const members
 	const TSharedRef<IChatModel> ControlledChat;

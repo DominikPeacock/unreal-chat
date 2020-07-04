@@ -3,6 +3,7 @@
 #include "ChatController.h"
 
 #include "IChatModel.h"
+#include "Logging.h"
 #include "SChatWidget.h"
 
 #define LOCTEXT_NAMESPACE "FChatManagerModule"
@@ -13,7 +14,6 @@ FChatController::FChatController(TSharedRef<IChatModel> InChatToControl)
 	TabGuid(FGuid::NewGuid())
 {
 	auto Tabmanager = FGlobalTabmanager::Get();
-	
 	Tabmanager->RegisterNomadTabSpawner(
 		GetTabIdAsName(),
 		FOnSpawnTab::CreateRaw(this, &FChatController::CreateOrGetChatTab),
@@ -21,6 +21,10 @@ FChatController::FChatController(TSharedRef<IChatModel> InChatToControl)
 		{
 				return true;
 		})
+	);
+
+	ControlledChat->AddMessageReceivedCallback(
+		IChatModel::FOnMessageReceivedCallback::CreateRaw(this, &FChatController::OnModelReceiveChatMessage)
 	);
 }
 
@@ -59,9 +63,31 @@ TSharedRef<SDockTab> FChatController::CreateOrGetChatTab(const FSpawnTabArgs& Ar
 		.OnTabClosed(SDockTab::FOnTabClosedCallback::CreateRaw(this, &FChatController::OnTabClosed))
 	[
 		SAssignNew(ChatWidget, SChatWidget)
+			.OnSendMessageCallback(SChatWidget::FOnSendMessage::CreateRaw(this, &FChatController::OnWidgetSendChatMessage))
 	];
-
+	
 	return CreatedTab;
+}
+
+void FChatController::OnTabClosed(TSharedRef<SDockTab> ClosedTab)
+{
+	ChatWidget = nullptr;
+}
+
+void FChatController::OnModelReceiveChatMessage(const FChatMessage& ChatMessage) const
+{
+	if(ChatWidget.IsValid())
+	{
+		ChatWidget->EnqueueNewMessage(
+			ChatMessage, 
+			ControlledChat->GetChatName().Equals(ChatMessage.SenderName)
+		);
+	}
+}
+
+void FChatController::OnWidgetSendChatMessage(const FString& MessageContent) const
+{
+	ControlledChat->SendMessage(MessageContent);
 }
 
 FName FChatController::GetTabIdAsName() const
@@ -69,9 +95,6 @@ FName FChatController::GetTabIdAsName() const
 	return FName(TabGuid.ToString());
 }
 
-void FChatController::OnTabClosed(TSharedRef<SDockTab> ClosedTab)
-{
-	ChatWidget = nullptr;
-}
+
 
 #undef LOCTEXT_NAMESPACE

@@ -2,12 +2,17 @@
 
 #include "SChatWidget.h"
 
+#include "ChatMessage.h"
+#include "Logging.h"
+
 #include "Widgets/Layout/SScrollBox.h"
 
 #define LOCTEXT_NAMESPACE "FChatManagerModule"
 
 void SChatWidget::Construct(const FArguments& InArgs)
 {
+	OnSendMessageCallback = InArgs._OnSendMessageCallback;
+	
 	ChildSlot
 		[
 			SNew(SBorder)
@@ -76,9 +81,17 @@ void SChatWidget::Construct(const FArguments& InArgs)
 		];
 }
 
+void SChatWidget::EnqueueNewMessage(const FChatMessage& ChatMessage, bool bIsSentBySelf)
+{
+	UE_LOG(ChatManager, Log, TEXT("Received message '%s' from '%s'"), *ChatMessage.MessageContent, *ChatMessage.SenderName);
+}
+
 FReply SChatWidget::OnClickSend()
 {
+	const FString& MessageToSend = EnteredMessageBox->GetText().ToString();
+	OnSendMessageCallback.ExecuteIfBound(MessageToSend);
 
+	EnteredMessageBox->SetText(FText::FromString(""));
 	return FReply::Handled();
 }
 
