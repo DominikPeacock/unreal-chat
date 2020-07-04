@@ -1,27 +1,30 @@
 {
-	"FileVersion": 3,
-	"Version": 1,
-	"VersionName": "1.0",
-	"FriendlyName": "ChatDebugCreator",
-	"Description": "Allows creation of chats for debug purposes using a custom section in project settings",
-	"Category": "Chat",
-	"CreatedBy": "Dominik Peacock",
-	"CreatedByURL": "",
-	"DocsURL": "",
-	"MarketplaceURL": "",
-	"SupportURL": "",
-	"CanContainContent": true,
-	"IsBetaVersion": false,
-	"IsExperimentalVersion": false,
-	"Installed": false,
-	"Modules": [
-		{
-			"Name": "ChatDebugCreator",
-			"Type": "Editor",
-			"LoadingPhase": "Default",
-			"Dependencies": [
-				"ChatManager"
-			]
-		}
-	]
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "1.0",
+  "FriendlyName": "ChatDebugCreator",
+  "Description": "Allows creation of chats for debug purposes using a custom section in project settings",
+  "Category": "Chat",
+  "CreatedBy": "Dominik Peacock",
+  "CreatedByURL": "",
+  "DocsURL": "",
+  "MarketplaceURL": "",
+  "SupportURL": "",
+  "CanContainContent": true,
+  "IsBetaVersion": false,
+  "IsExperimentalVersion": false,
+  "Installed": false,
+  "Modules": [
+    {
+      "Name": "ChatDebugCreator",
+      "Type": "Editor",
+      "LoadingPhase": "Default"
+    }
+  ],
+  "Plugins": [
+    {
+      "Name": "ChatManager",
+      "Enabled": true
+    }
+  ]
 }
