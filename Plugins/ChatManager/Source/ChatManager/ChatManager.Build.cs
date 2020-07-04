@@ -38,6 +38,7 @@ public class ChatManager : ModuleRules
                 "CoreUObject",
 				"EditorStyle",
                 "Engine",
+				"Messaging",
 				"Projects",
 				"Slate",
 				"SlateCore",

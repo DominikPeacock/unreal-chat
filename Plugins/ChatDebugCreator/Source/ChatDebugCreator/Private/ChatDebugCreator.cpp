@@ -14,10 +14,10 @@ void FChatDebugCreatorModule::StartupModule()
 	auto& ChatManagerModule = IChatManagerModule::Get();
 
 	ChatManagerModule.AddChat(
-		FChatModelFactory::CreateMessageBusChat("Chat 1")
+		FChatModelFactory::CreateMessageBusChat("Chat 1", "Peter", "DummyChannel")
 	);
 	ChatManagerModule.AddChat(
-		FChatModelFactory::CreateMessageBusChat("Chat 2")
+		FChatModelFactory::CreateMessageBusChat("Chat 2", "Gunther", "DummyChannel")
 	);
 }
 

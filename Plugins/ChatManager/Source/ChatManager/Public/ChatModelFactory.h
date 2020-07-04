@@ -13,5 +13,5 @@ public:
 	/**
 	 * Creates a chat uses the Message module for sending messages.
 	 */
-	static TSharedRef<IChatModel> CreateMessageBusChat(const FString& ChatName);
+	static TSharedRef<IChatModel> CreateMessageBusChat(const FString& ChatName, const FString& SenderName, const FName& MessagingChannelName);
 };

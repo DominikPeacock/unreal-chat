@@ -4,7 +4,7 @@
 
 #include "MessagingChatModel.h"
 
-TSharedRef<IChatModel> FChatModelFactory::CreateMessageBusChat(const FString& ChatName)
+TSharedRef<IChatModel> FChatModelFactory::CreateMessageBusChat(const FString& ChatName, const FString& SenderName, const FName& MessagingChannelName)
 {
-	return TSharedRef<IChatModel>(new FMessagingChatModel(ChatName));
+	return TSharedRef<IChatModel>(new FMessagingChatModel(ChatName, SenderName, MessagingChannelName));
 }
