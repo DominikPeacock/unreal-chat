@@ -97,7 +97,12 @@ void FChatController::OnModelReceiveChatMessage(const FChatMessage& ChatMessage)
 
 void FChatController::OnWidgetSendChatMessage(const FString& MessageContent) const
 {
-	ControlledChat->SendMessage(MessageContent);
+	FString CleansedString = MessageContent.TrimStartAndEnd();
+	const bool bIsMessageEmpty = CleansedString.IsEmpty();
+	if (!bIsMessageEmpty)
+	{
+		ControlledChat->SendMessage(CleansedString);
+	}
 }
 
 FName FChatController::GetTabIdAsName() const

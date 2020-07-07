@@ -111,11 +111,6 @@ void SChatWidget::EnqueueNewMessage(const FChatMessage& ChatMessage, bool bIsSen
 FReply SChatWidget::OnClickSend()
 {
 	const FString& MessageToSend = EnteredMessageBox->GetText().ToString();
-	const bool bIsMessageEmpty = MessageToSend.IsEmpty();
-	if(bIsMessageEmpty)
-	{
-		return FReply::Handled();
-	}
 	
 	OnSendMessageCallback.ExecuteIfBound(MessageToSend);
 	EnteredMessageBox->SetText(FText::FromString(""));
