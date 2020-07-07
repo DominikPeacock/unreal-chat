@@ -36,7 +36,7 @@ void SMessageText::Construct(const FArguments& InArgs)
 		// Message content
 		+SHorizontalBox::Slot()
 			.FillWidth(1.f)
-			.HAlign(HAlign_Left)
+			.HAlign(HAlign_Fill)
 			.VAlign(VAlign_Center)
 		[
 			SNew(STextBlock)
