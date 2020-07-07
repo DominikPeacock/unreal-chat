@@ -4,6 +4,7 @@
 
 #include "ChatMessage.h"
 #include "Logging.h"
+#include "SMessageText.h"
 
 #include "Widgets/Layout/SScrollBox.h"
 
@@ -83,6 +84,14 @@ void SChatWidget::Construct(const FArguments& InArgs)
 
 void SChatWidget::EnqueueNewMessage(const FChatMessage& ChatMessage, bool bIsSentBySelf)
 {
+	ChatHistory->AddSlot()
+		.Padding(5.f)
+	[
+		SNew(SMessageText)
+			.MessageContent(FText::FromString(ChatMessage.MessageContent))
+			.NameDisplayType(bIsSentBySelf ? SMessageText::SentByMe : SMessageText::SentByOtherPerson)
+			.SenderName(FText::FromString(ChatMessage.SenderName))
+	];
 	UE_LOG(ChatManager, Log, TEXT("Received message '%s' from '%s'"), *ChatMessage.MessageContent, *ChatMessage.SenderName);
 }
 
