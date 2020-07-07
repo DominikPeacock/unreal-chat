@@ -61,6 +61,13 @@ void SChatWidget::Construct(const FArguments& InArgs)
 						.Padding(1.f)
 					[
 						SAssignNew(EnteredMessageBox, SEditableTextBox)
+						.OnTextCommitted(FOnTextCommitted::CreateLambda([this](auto _, auto CommitType)
+						{
+							if(CommitType == ETextCommit::OnEnter)
+							{
+								OnClickSend();
+							}
+						}))
 					]
 
 					// Send button
