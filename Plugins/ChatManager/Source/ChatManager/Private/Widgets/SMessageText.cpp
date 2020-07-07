@@ -24,7 +24,7 @@ void SMessageText::Construct(const FArguments& InArgs)
 			.AutoWidth()
 			.Padding(0.f, 0.f, 5.f, 0.f)
 			.HAlign(HAlign_Left)
-			.VAlign(VAlign_Center)
+			.VAlign(VAlign_Top)
 		[
 			SNew(STextBlock)
 				.AutoWrapText(false)
@@ -40,9 +40,11 @@ void SMessageText::Construct(const FArguments& InArgs)
 			.VAlign(VAlign_Center)
 		[
 			SNew(STextBlock)
+				.AutoWrapText(true)
+				.WrappingPolicy(ETextWrappingPolicy::AllowPerCharacterWrapping)
+				.Justification(ETextJustify::Left)
 				.Text(InArgs._MessageContent)
 				.TextStyle(Style, FChatManagerStyle::MessageContentFontKey)
-				.AutoWrapText(true)
 				.ColorAndOpacity(TextColour)
 		]
 	];
