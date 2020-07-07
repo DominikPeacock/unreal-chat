@@ -53,10 +53,18 @@ FString FMessagingChatModel::GetSenderName() const
 	return SenderName;
 }
 
+const TArray<FChatMessage>& FMessagingChatModel::GetChatHistory() const
+{
+	return ChatHistory;
+}
+
 void FMessagingChatModel::OnReceiveChatMessage(
 	const FChatMessage& ChatMessage, 
 	const TSharedRef<IMessageContext, ESPMode::ThreadSafe>& Context)
 {
+	// This function receives messages both sent by ourselves and by others (see constructor)
+	ChatHistory.Add(ChatMessage);
+	
 	if(MessageReceivedEvent.IsBound())
 	{
 		MessageReceivedEvent.Broadcast(ChatMessage);

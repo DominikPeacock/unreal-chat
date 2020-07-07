@@ -20,6 +20,7 @@ public:
 	 * @return The name of the local person sending messages
 	 */
 	virtual FString GetSenderName() const = 0;
+	virtual const TArray<FChatMessage>& GetChatHistory() const = 0;
 
 public:
 

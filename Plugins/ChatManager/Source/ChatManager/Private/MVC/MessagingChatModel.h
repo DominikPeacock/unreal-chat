@@ -21,6 +21,7 @@ public:
 	
     FString GetChatName() const override;
     FString GetSenderName() const override;
+    const TArray<FChatMessage>& GetChatHistory() const override;
     //~ End IChatModel interface
 
 private:
@@ -30,6 +31,7 @@ private:
     const FString ChatName;
     const FString SenderName;
 	TSharedPtr<FMessageEndpoint, ESPMode::ThreadSafe> MessageBus;
+    TArray<FChatMessage> ChatHistory;
 
     FOnMessageReceived MessageReceivedEvent;
 	

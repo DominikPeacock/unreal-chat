@@ -65,8 +65,18 @@ TSharedRef<SDockTab> FChatController::CreateOrGetChatTab(const FSpawnTabArgs& Ar
 		SAssignNew(ChatWidget, SChatWidget)
 			.OnSendMessageCallback(SChatWidget::FOnSendMessage::CreateRaw(this, &FChatController::OnWidgetSendChatMessage))
 	];
+	DisplayChatHistory();
 	
 	return CreatedTab;
+}
+
+void FChatController::DisplayChatHistory() const
+{
+	auto& History = ControlledChat->GetChatHistory();
+	for (const auto& Message : History)
+	{
+		ChatWidget->EnqueueNewMessage(Message, WasMessageSentBySelf(Message));
+	}
 }
 
 void FChatController::OnTabClosed(TSharedRef<SDockTab> ClosedTab)
@@ -79,8 +89,8 @@ void FChatController::OnModelReceiveChatMessage(const FChatMessage& ChatMessage)
 	if(ChatWidget.IsValid())
 	{
 		ChatWidget->EnqueueNewMessage(
-			ChatMessage, 
-			ControlledChat->GetSenderName().Equals(ChatMessage.SenderName)
+			ChatMessage,
+			WasMessageSentBySelf(ChatMessage)
 		);
 	}
 }
@@ -93,6 +103,11 @@ void FChatController::OnWidgetSendChatMessage(const FString& MessageContent) con
 FName FChatController::GetTabIdAsName() const
 {
 	return FName(TabGuid.ToString());
+}
+
+bool FChatController::WasMessageSentBySelf(const FChatMessage& ChatMessage) const
+{
+	return ControlledChat->GetSenderName().Equals(ChatMessage.SenderName);
 }
 
 

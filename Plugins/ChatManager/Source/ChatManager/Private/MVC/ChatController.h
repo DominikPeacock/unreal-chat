@@ -28,11 +28,14 @@ public:
 private:
 
 	TSharedRef<SDockTab> CreateOrGetChatTab(const FSpawnTabArgs& Args);
+	void DisplayChatHistory() const;
 	void OnTabClosed(TSharedRef<SDockTab> ClosedTab);
 
 	void OnModelReceiveChatMessage(const FChatMessage& ChatMessage) const;
 	void OnWidgetSendChatMessage(const FString& MessageContent) const;
 	FName GetTabIdAsName() const;
+	bool WasMessageSentBySelf(const FChatMessage& ChatMessage) const;
+
 
 	// Const members
 	const TSharedRef<IChatModel> ControlledChat;
