@@ -80,7 +80,7 @@ void FChatController::OnModelReceiveChatMessage(const FChatMessage& ChatMessage)
 	{
 		ChatWidget->EnqueueNewMessage(
 			ChatMessage, 
-			ControlledChat->GetChatName().Equals(ChatMessage.SenderName)
+			ControlledChat->GetSenderName().Equals(ChatMessage.SenderName)
 		);
 	}
 }
