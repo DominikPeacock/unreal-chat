@@ -9,6 +9,12 @@
 
 TSharedPtr< FSlateStyleSet > FChatManagerStyle::StyleInstance = NULL;
 
+const FName FChatManagerStyle::SentByMeColorKey("ChatManager.SentByMeColor");
+const FName FChatManagerStyle::SentByOtherColorKey("ChatManager.SentByOtherColor");
+
+const FName FChatManagerStyle::MessageSenderFontKey("ChatManager.MessageSenderFont");
+const FName FChatManagerStyle::MessageContentFontKey("ChatManager.MessageContentFont");
+
 void FChatManagerStyle::Initialize()
 {
 	if (!StyleInstance.IsValid())
@@ -27,7 +33,7 @@ void FChatManagerStyle::Shutdown()
 
 FName FChatManagerStyle::GetStyleSetName()
 {
-	static FName StyleSetName(TEXT("ChatManagerStyle"));
+	static FName StyleSetName(TEXT("ChatManager"));
 	return StyleSetName;
 }
 
@@ -43,10 +49,30 @@ const FVector2D Icon40x40(40.0f, 40.0f);
 
 TSharedRef< FSlateStyleSet > FChatManagerStyle::Create()
 {
-	TSharedRef< FSlateStyleSet > Style = MakeShareable(new FSlateStyleSet("ChatManagerStyle"));
+	TSharedRef< FSlateStyleSet > Style = MakeShareable(new FSlateStyleSet("ChatManager"));
 	Style->SetContentRoot(IPluginManager::Get().FindPlugin("ChatManager")->GetBaseDir() / TEXT("Resources"));
 
-	Style->Set("ChatManager.PluginAction", new IMAGE_BRUSH(TEXT("ButtonIcon_40x"), Icon40x40));
+	// Colors
+	{
+		const FSlateColor SentByMeColor = FSlateColor(FLinearColor(148.f / 255.f, 0.f, 211.f / 255.f));
+		const FSlateColor SentByOtherColor = FSlateColor(FLinearColor(0.f, 139.f / 255.f, 139.f / 255.f));
+
+		Style->Set(SentByMeColorKey, SentByMeColor);
+		Style->Set(SentByOtherColorKey, SentByOtherColor);
+	}
+
+	// Fonts
+	{
+		auto& CoreStyle = FCoreStyle::Get();
+		auto UnderlinedFont = CoreStyle.GetWidgetStyle<FTextBlockStyle>("NormalUnderlinedText");
+		auto RegularFont = CoreStyle.GetWidgetStyle<FTextBlockStyle>("NormalText");
+
+		UnderlinedFont.SetFontSize(12);
+		RegularFont.SetFontSize(12);
+		
+		Style->Set(MessageSenderFontKey, UnderlinedFont);
+		Style->Set(MessageContentFontKey, RegularFont);
+	}
 
 	return Style;
 }

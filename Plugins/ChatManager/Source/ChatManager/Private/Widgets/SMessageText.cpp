@@ -2,15 +2,16 @@
 
 #include "SMessageText.h"
 
+#include "ChatManagerStyle.h"
+
 #define LOCTEXT_NAMESPACE "FChatManagerModule"
 
 void SMessageText::Construct(const FArguments& InArgs)
 {
-	const FSlateColor SentByMeColour = FSlateColor(FLinearColor(148.f / 255.f, 0.f, 211.f / 255.f));
-	const FSlateColor SentByOtherColour = FSlateColor(FLinearColor(0.f, 139.f / 255.f, 139.f / 255.f));
+	auto& Style = FChatManagerStyle::Get();
 
 	const FSlateColor TextColour =
-		InArgs._NameDisplayType == SentByMe ? SentByMeColour : SentByOtherColour;
+		InArgs._NameDisplayType == SentByMe ? Style.GetSlateColor(FChatManagerStyle::SentByMeColorKey) : Style.GetSlateColor(FChatManagerStyle::SentByOtherColorKey);
 	const FText SenderName = 
 		InArgs._NameDisplayType == SentByMe ? LOCTEXT("SentByMe", "Me") : InArgs._SenderName;
 	
@@ -26,8 +27,9 @@ void SMessageText::Construct(const FArguments& InArgs)
 			.VAlign(VAlign_Center)
 		[
 			SNew(STextBlock)
-				.Text(SenderName)
 				.AutoWrapText(false)
+				.TextStyle(Style, FChatManagerStyle::MessageSenderFontKey)
+				.Text(SenderName)
 				.ColorAndOpacity(TextColour)
 		]
 
@@ -39,6 +41,7 @@ void SMessageText::Construct(const FArguments& InArgs)
 		[
 			SNew(STextBlock)
 				.Text(InArgs._MessageContent)
+				.TextStyle(Style, FChatManagerStyle::MessageContentFontKey)
 				.AutoWrapText(true)
 				.ColorAndOpacity(TextColour)
 		]
