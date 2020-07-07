@@ -7,6 +7,7 @@
 #include "SMessageText.h"
 
 #include "Widgets/Layout/SScrollBox.h"
+#include "Widgets/Input/SMultiLineEditableTextBox.h"
 
 #define LOCTEXT_NAMESPACE "FChatManagerModule"
 
@@ -60,7 +61,9 @@ void SChatWidget::Construct(const FArguments& InArgs)
 						.FillWidth(1)
 						.Padding(1.f)
 					[
-						SAssignNew(EnteredMessageBox, SEditableTextBox)
+						SAssignNew(EnteredMessageBox, SMultiLineEditableTextBox)
+						.ModiferKeyForNewLine(EModifierKey::Shift)
+						.ToolTipText(LOCTEXT("UseShiftForMultiline", "Use Shift + Enter for a new line"))
 						.OnTextCommitted(FOnTextCommitted::CreateLambda([this](auto _, auto CommitType)
 						{
 							if(CommitType == ETextCommit::OnEnter)
@@ -92,7 +95,10 @@ void SChatWidget::Construct(const FArguments& InArgs)
 void SChatWidget::EnqueueNewMessage(const FChatMessage& ChatMessage, bool bIsSentBySelf)
 {
 	ChatHistory->AddSlot()
+		.AutoHeight()
 		.Padding(5.f)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Top)
 	[
 		SNew(SMessageText)
 			.MessageContent(FText::FromString(ChatMessage.MessageContent))

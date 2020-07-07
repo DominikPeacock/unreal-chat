@@ -7,7 +7,7 @@
 
 struct FChatMessage;
 
-class SEditableTextBox;
+class SMultiLineEditableTextBox;
 class SVerticalBox;
 
 class SChatWidget : public SCompoundWidget
@@ -30,7 +30,7 @@ private:
 
 
 	TSharedPtr<SVerticalBox> ChatHistory;
-	TSharedPtr<SEditableTextBox> EnteredMessageBox;
+	TSharedPtr<SMultiLineEditableTextBox> EnteredMessageBox;
 
 	FOnSendMessage OnSendMessageCallback;
 	
